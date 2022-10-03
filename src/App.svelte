@@ -3,28 +3,13 @@
   import Todo from "./components/Todo.svelte";
 
   let todo = ""; // input에 입력될 값!
-  let todoList = [
-    {
-      id: 1,
-      text: "할일이 산더미다",
-      completed: false,
-    },
-    {
-      id: 2,
-      text: "할일이 없나?",
-      completed: false,
-    },
-    {
-      id: 3,
-      text: "할일을 미루고싶다",
-      completed: false,
-    },
-  ];
-
-  let lastId = todoList[todoList.length - 1]["id"];
-
+  let todoList = [];
+  let lastId = 0;
   // 할일을 추가하는 함수
   let addTodo = () => {
+    if (todoList.length > 0) {
+      lastId = todoList[todoList.length - 1]["id"];
+    }
     if (todo) {
       let newTodo = {
         id: ++lastId,
