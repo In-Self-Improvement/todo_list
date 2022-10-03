@@ -17,7 +17,7 @@
     {
       id: 3,
       text: "할일을 미루고싶다",
-      completed: true,
+      completed: false,
     },
   ];
 
