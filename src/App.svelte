@@ -1,0 +1,60 @@
+<script lang="ts">
+  import Input from "./components/Input.svelte";
+  import Todo from "./components/Todo.svelte";
+
+  let todo = ""; // input에 입력될 값!
+  let todoList = [
+    {
+      id: 1,
+      text: "할일이 산더미다",
+      completed: false,
+    },
+    {
+      id: 2,
+      text: "할일이 없나?",
+      completed: false,
+    },
+    {
+      id: 3,
+      text: "할일을 미루고싶다",
+      completed: true,
+    },
+  ];
+
+  let lastId = todoList[todoList.length - 1]["id"];
+
+  // 할일을 추가하는 함수
+  let addTodo = () => {
+    if (todo) {
+      let newTodo = {
+        id: ++lastId,
+        text: todo,
+        completed: false,
+      };
+
+      todoList[todoList.length] = newTodo;
+      todo = "";
+    }
+  };
+
+  // todo값을 업데이트 하면서, 엔터키를 누르면 할일이 추가되도록 하는 함수
+  let handleKeyUp = (e) => {
+    todo = e.target.value;
+    if (e.keyCode === 13) {
+      addTodo();
+    }
+  };
+  let handleComplete = (id) => {
+    const index = todoList.findIndex((todo) => todo.id === id);
+    todoList[index]["completed"] = !todoList[index]["completed"];
+  };
+</script>
+
+<main>
+  <p>Todo list</p>
+  <Input {todo} {addTodo} {handleKeyUp} />
+  <Todo {todoList} {handleComplete} />
+</main>
+
+<style>
+</style>
