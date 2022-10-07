@@ -33,12 +33,20 @@
     const index = todoList.findIndex((todo) => todo.id === id);
     todoList[index]["completed"] = !todoList[index]["completed"];
   };
+  let deleteTodo = (id) => {
+    const todo = todoList.filter((todo) => todo.id !== id);
+    todoList = todo;
+    // const index = todoList.findIndex((todo) => todo.id === id);
+    // const todo = todoList.splice(index, 1);
+    // console.log("it;s work", todo);
+    // todoList = todo;
+  };
 </script>
 
 <main>
   <p>Todo list</p>
   <Input {todo} {addTodo} {handleKeyUp} />
-  <Todo {todoList} {handleComplete} />
+  <Todo {todoList} {handleComplete} {deleteTodo} />
 </main>
 
 <style>
