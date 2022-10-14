@@ -36,17 +36,18 @@
   let deleteTodo = (id) => {
     const todo = todoList.filter((todo) => todo.id !== id);
     todoList = todo;
-    // const index = todoList.findIndex((todo) => todo.id === id);
-    // const todo = todoList.splice(index, 1);
-    // console.log("it;s work", todo);
-    // todoList = todo;
+  };
+  let editTodo = (id, text) => {
+    console.log(id, text);
+    const index = todoList.findIndex((todo) => todo.id === id);
+    todoList[index]["text"] = text;
   };
 </script>
 
 <main>
   <p>Todo list</p>
   <Input {todo} {addTodo} {handleKeyUp} />
-  <Todo {todoList} {handleComplete} {deleteTodo} />
+  <Todo {todoList} {handleComplete} {deleteTodo} {editTodo} />
 </main>
 
 <style>

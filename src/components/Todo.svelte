@@ -3,10 +3,11 @@
   export let todoList;
   export let handleComplete;
   export let deleteTodo;
+  export let editTodo;
 </script>
 
 <div>
   {#each todoList as todo}
-    <TodoItem {todo} {handleComplete} {deleteTodo} />
+    <TodoItem {todo} {handleComplete} {deleteTodo} {editTodo} />
   {/each}
 </div>
