@@ -2,11 +2,14 @@
   export let todo;
   export let handleComplete;
   export let deleteTodo;
+  export let cancelEditTodo;
   export let editTodo;
   $: completed = todo.completed ? "line-through" : "none";
   let editMode = false;
+  let temp;
   const openEditMode = () => {
     editMode = true;
+    temp = todo.text;
   };
   const closeEitMode = () => {
     editMode = false;
@@ -16,6 +19,12 @@
 <div>
   {#if editMode}
     <input type="text" bind:value={todo.text} />
+    <button
+      on:click={() => {
+        closeEitMode();
+        cancelEditTodo(todo.id, temp);
+      }}>cancel</button
+    >
     <button
       on:click={() => {
         editTodo(todo.id, todo.text);

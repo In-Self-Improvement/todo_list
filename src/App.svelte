@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { identity } from "svelte/internal";
   import Input from "./components/Input.svelte";
   import Todo from "./components/Todo.svelte";
 
@@ -37,8 +38,11 @@
     const todo = todoList.filter((todo) => todo.id !== id);
     todoList = todo;
   };
+  let cancelEditTodo = (id, text) => {
+    const index = todoList.findIndex((todo) => todo.id === id);
+    todoList[index]["text"] = text;
+  };
   let editTodo = (id, text) => {
-    console.log(id, text);
     const index = todoList.findIndex((todo) => todo.id === id);
     todoList[index]["text"] = text;
   };
@@ -47,7 +51,7 @@
 <main>
   <p>Todo list</p>
   <Input {todo} {addTodo} {handleKeyUp} />
-  <Todo {todoList} {handleComplete} {deleteTodo} {editTodo} />
+  <Todo {todoList} {handleComplete} {deleteTodo} {editTodo} {cancelEditTodo} />
 </main>
 
 <style>
