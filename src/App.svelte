@@ -53,11 +53,16 @@
   };
   let selectedCount = () => {
     num = 0;
-    for (let i = 0; i < todoList.length; i++) {
-      if (todoList[i].completed === true) {
+    todoList.forEach((todo) => {
+      if (todo["completed"] === true) {
         num++;
       }
-    }
+    });
+    // for (let i = 0; i < todoList.length; i++) {
+    //   if (todoList[i].completed === true) {
+    //     num++;
+    //   }
+    // }
   };
   let selectAllCompleted = () => {
     if (num === todoList.length) {
