@@ -4,6 +4,7 @@
   export let deleteTodo;
   export let cancelEditTodo;
   export let editTodo;
+
   $: completed = todo.completed ? "line-through" : "none";
   let editMode = false;
   let temp;
