@@ -2,13 +2,13 @@
   export let filterAll
   export let filterActive
   export let filterCompleted
-  export let filterNum
+  export let filterType
 </script>
 
 <div>
-  <button class={filterNum === 'All' ? 'selected' : ''} on:click={filterAll}>All</button>
-  <button class={filterNum === 'Active' ? 'selected' : ''} on:click={filterActive}>Active</button>
-  <button class={filterNum === 'Completed' ? 'selected' : ''} on:click={filterCompleted}>Completed</button>
+  <button class={filterType === 'All' ? 'selected' : ''} on:click={filterAll}>All</button>
+  <button class={filterType === 'Active' ? 'selected' : ''} on:click={filterActive}>Active</button>
+  <button class={filterType === 'Completed' ? 'selected' : ''} on:click={filterCompleted}>Completed</button>
 </div>
 
 <style>

@@ -8,7 +8,7 @@
   let lastId = 0;
   let num = 0;
   // filter 추가
-  let filterNum = "All";
+  let filterType = "All";
   let todoListStore = [];
   // 할일을 추가하는 함수
   let addTodo = () => {
@@ -24,12 +24,12 @@
 
       todoList[todoList.length] = newTodo;
       todo = "";
-      if (filterNum !== "All") {
+      if (filterType !== "All") {
         todoListStore[todoListStore.length] = newTodo;
       }
     }
     setTimeout(() => {
-      currentFilter(filterNum);
+      currentFilter(filterType);
     }, 1000);
   };
 
@@ -41,7 +41,7 @@
     }
   };
   let handleComplete = (id) => {
-    // if (filterNum !== "All") {
+    // if (filterType !== "All") {
     //   const index = todoList.findIndex((todo) => todo.id === id);
     //   todoList[index]["completed"] = !todoList[index]["completed"];
     // }
@@ -50,14 +50,14 @@
     todoList[index]["completed"] = !todoList[index]["completed"];
     selectedCount();
     setTimeout(() => {
-      currentFilter(filterNum);
+      currentFilter(filterType);
     }, 1000);
   };
   let deleteTodo = (id) => {
     const todo = todoList.filter((todo) => todo.id !== id);
     const todoStore = todoListStore.filter((todo) => todo.id !== id);
     todoList = todo;
-    if (filterNum !== "All") {
+    if (filterType !== "All") {
       todoListStore = todoStore;
     }
     selectedCount();
@@ -69,7 +69,7 @@
     selectedCount();
   };
   let editTodo = (id, text) => {
-    if (filterNum !== "All") {
+    if (filterType !== "All") {
       const index = todoListStore.findIndex((todo) => todo.id === id);
       todoListStore[index]["text"] = text;
     }
@@ -91,6 +91,9 @@
         todoList[i]["completed"] = false;
       }
       selectedCount();
+      setTimeout(() => {
+        currentFilter(filterType);
+      }, 1000);
       return;
     }
     for (let i = 0; i < todoList.length; i++) {
@@ -98,25 +101,23 @@
     }
     selectedCount();
     setTimeout(() => {
-      currentFilter(filterNum);
+      currentFilter(filterType);
     }, 1000);
   };
   let clearCompletedTodo = () => {
-    if (filterNum !== "All") {
-      const todoStore = todoListStore.filter((todo) => todo.completed !== true);
-      todoListStore = todoStore;
-    }
+    const todoStore = todoListStore.filter((todo) => todo.completed !== true);
+    todoListStore = todoStore;
+
     const todo = todoList.filter((todo) => todo.completed !== true);
     todoList = todo;
 
     selectedCount();
   };
   let filterAll = () => {
-    console.log("filterAll", todoListStore.length);
     if (todoListStore.length !== 0) {
       todoList = todoListStore;
     }
-    filterNum = "All";
+    filterType = "All";
     selectedCount();
   };
   let filterActive = () => {
@@ -126,7 +127,7 @@
     todoList = todoListStore;
     const todo = todoList.filter((todo) => todo.completed !== true);
     todoList = todo;
-    filterNum = "Active";
+    filterType = "Active";
     selectedCount();
   };
   let filterCompleted = () => {
@@ -136,7 +137,7 @@
     todoList = todoListStore;
     const todo = todoList.filter((todo) => todo.completed === true);
     todoList = todo;
-    filterNum = "Completed";
+    filterType = "Completed";
     selectedCount();
   };
   let currentFilter = (filter: string) => {
@@ -160,7 +161,7 @@
     {clearCompletedTodo}
   />
   <Todo {todoList} {handleComplete} {deleteTodo} {editTodo} {cancelEditTodo} />
-  <Filter {filterAll} {filterCompleted} {filterActive} {filterNum} />
+  <Filter {filterAll} {filterCompleted} {filterActive} {filterType} />
 </main>
 
 <style>
