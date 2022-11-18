@@ -5,11 +5,10 @@
 
   let todo = ""; // input에 입력될 값!
   let todoList = [];
+  let filteredTodoList = [];
+  let filterType = "All";
   let lastId = 0;
   let num = 0;
-  // filter 추가
-  let filterType = "All";
-  let todoListStore = [];
   // 할일을 추가하는 함수
   let addTodo = () => {
     if (todoList.length > 0) {
@@ -24,13 +23,9 @@
 
       todoList[todoList.length] = newTodo;
       todo = "";
-      if (filterType !== "All") {
-        todoListStore[todoListStore.length] = newTodo;
-      }
     }
-    setTimeout(() => {
-      currentFilter(filterType);
-    }, 1000);
+    console.log(todoList);
+    currentFilter();
   };
 
   // todo값을 업데이트 하면서, 엔터키를 누르면 할일이 추가되도록 하는 함수
@@ -41,38 +36,21 @@
     }
   };
   let handleComplete = (id) => {
-    // if (filterType !== "All") {
-    //   const index = todoList.findIndex((todo) => todo.id === id);
-    //   todoList[index]["completed"] = !todoList[index]["completed"];
-    // }
     const index = todoList.findIndex((todo) => todo.id === id);
-    console.log("com", index, todoList);
     todoList[index]["completed"] = !todoList[index]["completed"];
-    selectedCount();
-    setTimeout(() => {
-      currentFilter(filterType);
-    }, 1000);
+    currentFilter();
   };
   let deleteTodo = (id) => {
     const todo = todoList.filter((todo) => todo.id !== id);
-    const todoStore = todoListStore.filter((todo) => todo.id !== id);
     todoList = todo;
-    if (filterType !== "All") {
-      todoListStore = todoStore;
-    }
-    selectedCount();
+    currentFilter();
   };
   let cancelEditTodo = (id, text) => {
     const index = todoList.findIndex((todo) => todo.id === id);
     todoList[index]["text"] = text;
-    todoListStore[index]["text"] = text;
     selectedCount();
   };
   let editTodo = (id, text) => {
-    if (filterType !== "All") {
-      const index = todoListStore.findIndex((todo) => todo.id === id);
-      todoListStore[index]["text"] = text;
-    }
     const index = todoList.findIndex((todo) => todo.id === id);
     todoList[index]["text"] = text;
     selectedCount();
@@ -80,79 +58,84 @@
   let selectedCount = () => {
     num = 0;
     todoList.forEach((todo) => {
-      if (todo["completed"]) {
+      if (todo["completed"] === true) {
         num++;
       }
     });
+    // for (let i = 0; i < todoList.length; i++) {
+    //   if (todoList[i].completed === true) {
+    //     num++;
+    //   }
+    // }
   };
   let selectAllCompleted = () => {
-    if (num === todoList.length) {
-      for (let i = 0; i < todoList.length; i++) {
-        todoList[i]["completed"] = false;
+    if (filterType !== "All") {
+      if (num === filteredTodoList.length) {
+        for (let i = 0; i < filteredTodoList.length; i++) {
+          filteredTodoList[i]["completed"] = false;
+        }
+        currentFilter();
+        return;
       }
-      selectedCount();
-      setTimeout(() => {
-        currentFilter(filterType);
-      }, 1000);
-      return;
+      for (let i = 0; i < filteredTodoList.length; i++) {
+        filteredTodoList[i]["completed"] = true;
+      }
+    } else {
+      if (num === todoList.length) {
+        for (let i = 0; i < todoList.length; i++) {
+          todoList[i]["completed"] = false;
+        }
+        currentFilter();
+        return;
+      }
+      for (let i = 0; i < todoList.length; i++) {
+        todoList[i]["completed"] = true;
+      }
     }
-    for (let i = 0; i < todoList.length; i++) {
-      todoList[i]["completed"] = true;
-    }
-    selectedCount();
-    setTimeout(() => {
-      currentFilter(filterType);
-    }, 1000);
+
+    currentFilter();
   };
   let clearCompletedTodo = () => {
-    const todoStore = todoListStore.filter((todo) => todo.completed !== true);
-    todoListStore = todoStore;
-
     const todo = todoList.filter((todo) => todo.completed !== true);
     todoList = todo;
+    filteredTodoList = todo;
 
-    selectedCount();
+    currentFilter();
   };
   let filterAll = () => {
-    if (todoListStore.length !== 0) {
-      todoList = todoListStore;
-    }
     filterType = "All";
-    selectedCount();
   };
   let filterActive = () => {
-    if (todoListStore.length === 0) {
-      todoListStore = todoList;
-    }
-    todoList = todoListStore;
-    const todo = todoList.filter((todo) => todo.completed !== true);
-    todoList = todo;
     filterType = "Active";
-    selectedCount();
+    const todo = todoList.filter((todo) => todo.completed !== true);
+    filteredTodoList = todo;
+    console.log("Actice", filteredTodoList, filterType);
   };
   let filterCompleted = () => {
-    if (todoListStore.length === 0) {
-      todoListStore = todoList;
-    }
-    todoList = todoListStore;
-    const todo = todoList.filter((todo) => todo.completed === true);
-    todoList = todo;
     filterType = "Completed";
-    selectedCount();
+    const todo = todoList.filter((todo) => todo.completed === true);
+    filteredTodoList = todo;
+    console.log("Completed", filteredTodoList, filterType);
   };
-  let currentFilter = (filter: string) => {
-    if (filter === "All") {
+  let currentFilter = () => {
+    if (filterType === "All") {
       filterAll();
-    } else if (filter === "Active") {
+    } else if (filterType === "Active") {
       filterActive();
-    } else if (filter === "Completed") {
+    } else if (filterType === "Completed") {
       filterCompleted();
     }
+    selectedCount();
+    console.log("current filter", filterType, filteredTodoList, todoList);
   };
 </script>
 
 <main>
-  <p>Todo list {num}{"/"}{todoList.length}</p>
+  {#if filterType !== "All"}
+    <p>Todo list {num}{"/"}{filteredTodoList.length}</p>
+  {:else}
+    <p>Todo list {num}{"/"}{todoList.length}</p>
+  {/if}
   <Input
     {todo}
     {addTodo}
@@ -160,7 +143,15 @@
     {selectAllCompleted}
     {clearCompletedTodo}
   />
-  <Todo {todoList} {handleComplete} {deleteTodo} {editTodo} {cancelEditTodo} />
+  <Todo
+    {todoList}
+    {handleComplete}
+    {deleteTodo}
+    {editTodo}
+    {cancelEditTodo}
+    {filteredTodoList}
+    {filterType}
+  />
   <Filter {filterAll} {filterCompleted} {filterActive} {filterType} />
 </main>
 
