@@ -9,6 +9,7 @@
   let filterType = "All";
   let lastId = 0;
   let num = 0;
+  let filteredNum = 0;
   // 할일을 추가하는 함수
   let addTodo = () => {
     if (todoList.length > 0) {
@@ -57,9 +58,15 @@
   };
   let selectedCount = () => {
     num = 0;
+    filteredNum = 0;
     todoList.forEach((todo) => {
       if (todo["completed"] === true) {
         num++;
+      }
+    });
+    filteredTodoList.forEach((todo) => {
+      if (todo["completed"] === true) {
+        filteredNum++;
       }
     });
     // for (let i = 0; i < todoList.length; i++) {
@@ -132,7 +139,7 @@
 
 <main>
   {#if filterType !== "All"}
-    <p>Todo list {num}{"/"}{filteredTodoList.length}</p>
+    <p>Todo list {filteredNum}{"/"}{filteredTodoList.length}</p>
   {:else}
     <p>Todo list {num}{"/"}{todoList.length}</p>
   {/if}
